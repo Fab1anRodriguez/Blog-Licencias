@@ -1,0 +1,245 @@
+:root {
+    --bg-dark: #1a1a1a;
+    --bg-card: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --accent-1: #f0d6e0;  /* rosa pastel */
+    --accent-2: #d6e0f0;  /* azul pastel */
+    --accent-3: #e0f0d6;  /* verde pastel */
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    /* text-align: center; */ /* ya no es necesario centrar */
+    padding: 0; /* quitar padding si no se necesita */
+    border-bottom: none; /* quitar borde inferior si el contenedor ya lo tiene */
+    margin-bottom: 30px; /* mantener margen inferior para separar del contenido */
+}
+
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px; /* Aumentado padding vertical y horizontal */
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* margin-bottom: 30px; */ /* opcional: mover margen a <header> */
+    margin-bottom: 0;
+}
+
+/* Estilos para el div que contiene el título y bienvenida */
+.header-container > div:first-child {
+    margin-right: 20px; /* añadir espacio a la derecha */
+}
+
+/* Estilos específicos para el h1 dentro del header-container */
+.header-container h1 {
+    color: var(--accent-1);
+    margin: 0 0 8px 0; /* Añadido margen inferior para separar del texto de bienvenida */
+    font-size: 1.8em; /* Opcional: ajustar tamaño */
+}
+
+/* Estilos específicos para el párrafo dentro del header-container */
+.header-container p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+/* Contenedor de los botones/enlaces de acciones */
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Añadir espacio entre los elementos de acción */
+}
+
+.admin-actions a {
+    margin-left: 0; /* Quitar margen si se usa gap */
+    text-decoration: none;
+    color: var(--accent-2);
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.admin-actions a:hover {
+    color: var(--accent-1);
+}
+
+.cerrar-sesion {
+    background-color: #e57373; /* un tono rojo más claro */
+    color: var(--bg-dark);
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.cerrar-sesion:hover {
+    background-color: #ef9a9a; /* un tono rojo más claro al pasar el mouse */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(214, 224, 240, 0.2);
+}
+
+.nuevo-post {
+    background-color: var(--bg-card);
+    padding: 20px ;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+}
+
+.tuki{
+    padding-right: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--accent-2);
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border-radius: 5px;
+}
+
+textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+button {
+    background-color: var(--accent-2);
+    color: var(--bg-dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--accent-1);
+}
+
+.post {
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--accent-3);
+}
+
+.post h3 {
+    color: var(--accent-2);
+    margin-top: 0;
+}
+
+.no-posts {
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+
+span.categoria {
+    display: inline-block;
+    background-color: var(--accent-2);
+    color: var(--bg-dark);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(214, 224, 240, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+span.categoria:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(214, 224, 240, 0.4);
+    background-color: var(--accent-1);
+}
+
+select.categoria {
+    width: 30%;
+    padding: 6px 14px;
+    border: 1px solid var(--accent-2);
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1px;
+}
+
+select.categoria:hover {
+    border-color: var(--accent-1);
+    cursor: pointer;
+}
+
+select.categoria:focus {
+    outline: none;
+    border-color: var(--accent-1);
+    box-shadow: 0 0 15px rgba(214, 224, 240, 0.2);
+    cursor: pointer;
+}
+
+select.categoria option {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    padding: 12px;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    justify-content: space-around;
+}
+
+.btn-nav {
+    background-color: var(--accent-2);
+    color: var(--bg-dark);
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.btn-nav:hover {
+    background-color: var(--accent-1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(214, 224, 240, 0.2);
+}

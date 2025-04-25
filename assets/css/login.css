@@ -1,0 +1,135 @@
+:root {
+    --bg-dark: #1a1a1a;
+    --bg-card: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --accent-1: #f0d6e0;  /* rosa pastel */
+    --accent-2: #d6e0f0;  /* azul pastel */
+    --error: #ff4444;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.caja {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.formu {
+    background-color: var(--bg-card);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formulario h1 {
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.8rem;
+}
+
+.formulario__grupo {
+    position: relative;
+}
+
+.formulario__grupo-input {
+    position: relative;
+}
+
+.formulario__grupo-input input {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--bg-dark);
+    border: 2px solid var(--accent-2);
+    border-radius: 5px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.formulario__grupo-input input:focus {
+    outline: none;
+    border-color: var(--accent-1);
+    box-shadow: 0 0 5px rgba(240, 214, 224, 0.3);
+}
+
+.formulario__grupo-input input::placeholder {
+    color: var(--text-secondary);
+}
+
+.formulario__input-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.formulario__grupo-error .formulario__input-error {
+    display: block;
+}
+
+.formulario__grupo-error input {
+    border-color: var(--error);
+}
+
+button {
+    background-color: var(--accent-2);
+    color: var(--bg-dark);
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: var(--accent-1);
+    transform: translateY(-2px);
+}
+
+.form-footer {
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 1rem 0 0 0;
+}
+
+.login-link {
+    color: var(--accent-2);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-link:hover {
+    color: var(--accent-1);
+}
+
+/* Agregar animación de shake para errores */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.formulario__grupo-error {
+    animation: shake 0.6s;
+}
