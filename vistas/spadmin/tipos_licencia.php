@@ -40,9 +40,9 @@ $tipos = $sql->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </header>
 
-        <div class="nuevo-tipo">
+        <div class="nuevo-post">
             <h2>Registrar Nuevo Tipo de Licencia</h2>
-            <form action="tipo_licencia/crear_tipo_licencia.php" method="post" class="form-tipo">
+            <form action="tipo_licencia/crear_tipo_licencia.php" method="post" class="form-empresa">
                 <div class="form-group">
                     <label>Nombre del Tipo de Licencia</label>
                     <input type="text" name="nom_tipolicencia" required>
@@ -54,12 +54,13 @@ $tipos = $sql->fetchAll(PDO::FETCH_ASSOC);
         <div class="tipos-licencia">
             <h2>Tipos de Licencia Registrados</h2>
             <?php if ($tipos): ?>
+                <div class="grid-empresas">
                 <?php foreach ($tipos as $tipo): ?>
-                    <div class="tipo-card">
-                        <div class="tipo-info">
+                    <div class="empresa-card">
+                        <div class="empresa-header">
                             <h3><?php echo htmlspecialchars($tipo['nom_tipolicencia']); ?></h3>
                         </div>
-                        <div class="tipo-actions">
+                        <div class="empresa-actions">
                             <a href="tipo_licencia/editar_tipo_licencia.php?id=<?php echo $tipo['id_tipolicencia']; ?>" 
                                class="btn-editar">Editar</a>
                             <a href="tipo_licencia/eliminar_tipo_licencia.php?id=<?php echo $tipo['id_tipolicencia']; ?>" 

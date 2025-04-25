@@ -14,9 +14,10 @@ if (isset($_POST['crear'])) {
     $nom_usu = trim($_POST['nom_usu']);
     $correo = trim($_POST['correo']);
     $password = trim($_POST['password']);
-    $id_rol = 1; // Rol fijo para usuario normal
+    $id_rol = 1; // usu normal
     $id_estado = trim($_POST['id_estado']);
-    $nit_empresa = $_SESSION['NIT']; // Empresa del administrador
+    $codigo_barras = trim($_POST['codigo_barras']);
+    $NIT = $_SESSION['NIT']; // NIT de la empresa del administrador
     
     if (empty($doc_usu) || empty($nom_usu) || empty($correo) || empty($password)) {
         echo "<script>alert('Todos los campos son obligatorios');
@@ -47,10 +48,10 @@ if (isset($_POST['crear'])) {
     
     $sql = $con->prepare("
         INSERT INTO usuarios 
-        (doc_usu, nom_usu, correo, password, id_rol, id_estado, nit_empresa) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)");
+        (doc_usu, nom_usu, correo, password, id_rol, id_estado, NIT, codigo_barras) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     
-    if ($sql->execute([$doc_usu, $nom_usu, $correo, $password_hash, $id_rol, $id_estado, $nit_empresa])) {
+    if ($sql->execute([$doc_usu, $nom_usu, $correo, $password_hash, $id_rol, $id_estado, $NIT, $codigo_barras])) {
         echo "<script>alert('Usuario creado exitosamente');
         window.location='../usuarios.php';</script>";
     } else {

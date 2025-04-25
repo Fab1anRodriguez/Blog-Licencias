@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../conex/conex.php');
+require_once('../../conex/conex.php');
 $conex = new Database;
 $con = $conex->conectar();
 
@@ -23,10 +23,10 @@ if (isset($_POST['publicar'])) {
     $sql = $con->prepare("INSERT INTO post (titulo, contenido, doc_usu,id_categoria) VALUES (?, ?, ?,?)");
     if ($sql->execute([$titulo, $contenido, $doc_usu, $id_categoria])) {
         echo "<script>alert('Publicación creada exitosamente');
-        window.location='../index.php';</script>";
+        window.location='index.php';</script>";
     } else {
         echo "<script>alert('Error al crear la publicación');
-        window.location='../index.php';</script>";
+        window.location='index.php';</script>";
     }
 }
 ?>

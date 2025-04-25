@@ -41,7 +41,7 @@ $roles = $sql->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="nuevo-post">
             <h2>Registrar Nuevo Rol</h2>
-            <form action="rol/crear_rol.php" method="post" class="form-empresa">
+            <form action="rol/crear_rol.php" method="post" class="form-tipo">
                 <div class="form-group">
                     <label>Nombre del Rol</label>
                     <input type="text" name="nom_rol" required placeholder="Ingrese el nombre del rol">

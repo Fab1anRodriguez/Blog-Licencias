@@ -17,6 +17,7 @@ if (isset($_POST['crear'])) {
     $id_rol = trim($_POST['id_rol']);
     $id_estado = trim($_POST['id_estado']);
     $nit_empresa = trim($_POST['nit_empresa']);
+    $codigo_barras= trim($_POST['codigo_barras']);
     
     if (empty($doc_usu) || empty($nom_usu) || empty($correo) || empty($password)) {
         echo "<script>alert('Todos los campos son obligatorios');
@@ -45,8 +46,8 @@ if (isset($_POST['crear'])) {
     // Encriptar contraseña
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
     
-    $sql = $con->prepare("INSERT INTO usuarios (doc_usu, nom_usu, correo, password, id_rol, id_estado, NIT) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $sql = $con->prepare("INSERT INTO usuarios (doc_usu, nom_usu, correo, password, id_rol, id_estado, NIT, codigo_barras) 
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     
     if ($sql->execute([$doc_usu, $nom_usu, $correo, $password_hash, $id_rol, $id_estado, $nit_empresa])) {
         echo "<script>alert('Usuario creado exitosamente');

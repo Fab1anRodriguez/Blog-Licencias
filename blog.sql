@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2025 a las 05:56:28
+-- Tiempo de generación: 25-04-2025 a las 17:08:57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -61,7 +61,8 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`NIT`, `nom_empresa`, `direccion`, `correo`, `id_estado`) VALUES
-('1', 'empresa1', 'direccion1#33', 'empresa@gmail.com', 1);
+('1', 'empresa1', 'direccion1#33', 'empresa@gmail.com', 1),
+('465132', 'Empresa Demo', 'Demo #179uhin', 'demo@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -103,6 +104,7 @@ CREATE TABLE `licencia` (
 --
 
 INSERT INTO `licencia` (`clave`, `fecha_ini`, `fecha_fin`, `id_estado`, `id_tipolicencia`, `nit_empresa`) VALUES
+('AWWO-NGTR-QXVH-PVJR-VMGY-D2KH', '2025-04-24', '2025-05-01', 1, 1, '465132'),
 ('Y4I5-QJ9G-865U-A1HM-3ZZE-CNLS', '2025-04-23', '2025-04-26', 1, 2, '1');
 
 -- --------------------------------------------------------
@@ -124,7 +126,8 @@ CREATE TABLE `post` (
 --
 
 INSERT INTO `post` (`id_post`, `titulo`, `contenido`, `id_categoria`, `doc_usu`) VALUES
-(8, 'Se puede vivir del arte?', 'Titulo inspirado de una noticia publicada en internet', 4, '12345678');
+(8, 'Se puede vivir del arte?', 'Titulo inspirado de una noticia publicada en internet', 4, '12345678'),
+(9, 'Se puede vivir del arte?', 'Contenido de la historia .......', 4, '000000222222');
 
 -- --------------------------------------------------------
 
@@ -143,7 +146,7 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`id_rol`, `nom_rol`) VALUES
 (1, 'user'),
-(2, 'admin'),
+(2, 'Admin'),
 (3, 'Super Admin');
 
 -- --------------------------------------------------------
@@ -176,20 +179,22 @@ CREATE TABLE `usuarios` (
   `nom_usu` varchar(100) NOT NULL,
   `correo` varchar(60) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `foto` varchar(255) NOT NULL,
   `id_rol` int(11) NOT NULL,
   `NIT` varchar(11) DEFAULT NULL,
-  `id_estado` int(11) DEFAULT NULL
+  `id_estado` int(11) DEFAULT NULL,
+  `codigo_barras` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`doc_usu`, `nom_usu`, `correo`, `password`, `foto`, `id_rol`, `NIT`, `id_estado`) VALUES
-('000000111111', 'ADMINPRUEBA', 'ADMINPRUEBA@GMAIL.COM', '$2y$10$LcA/kSrWpv3aQKOzy2r0NOcuRxL2zGkEZrKmR8dazuw7esWnUpHi2', '', 2, '1', 1),
-('000000222222', 'pruebauser', 'PREUBAUSER@GMAIL.COM', '$2y$10$anSsraNl/GpysBs6h9fQ9.UL.3UAMeOeqTLR285Sj6epK35FuOA4W', '', 1, '1', 1),
-('12345678', 'fabian', 'fabian@gmail.com', '$2y$10$vPqvRq4Mp/loZf4ybSZFAucOMAILvugzxmfd0D7Fl8JwtbYWb0/by', '', 3, NULL, 1);
+INSERT INTO `usuarios` (`doc_usu`, `nom_usu`, `correo`, `password`, `id_rol`, `NIT`, `id_estado`, `codigo_barras`) VALUES
+('000000111111', 'ADMINPRUEBA', 'ADMINPRUEBA@GMAIL.COM', '$2y$10$LcA/kSrWpv3aQKOzy2r0NOcuRxL2zGkEZrKmR8dazuw7esWnUpHi2', 2, '1', 1, ''),
+('000000222222', 'pruebauserr', 'PREUBAUSER@GMAIL.COM', '$2y$10$anSsraNl/GpysBs6h9fQ9.UL.3UAMeOeqTLR285Sj6epK35FuOA4W', 1, '1', 1, '7706616024937'),
+('000000333333', 'USUARIODEMO', 'usuariodemo@gmail.com', '$2y$10$fE9SNAwScqGBEQwwUB0MU.Ci4s9c8m5708kdzImyQL5RGU4h/n8gm', 1, '465132', 1, '7702124867172'),
+('12345678', 'fabian', 'fabian@gmail.com', '$2y$10$vPqvRq4Mp/loZf4ybSZFAucOMAILvugzxmfd0D7Fl8JwtbYWb0/by', 3, NULL, 1, ''),
+('78459784651348', 'Daniel Montealegre', 'daniel@gmail.com', '$2y$10$w/IsxF7cXuGAZVberegSou0W4ZcxjZPQ4HgBWw.4upK12kRjB2B2S', 1, '1', 2, '7708710799155');
 
 --
 -- Índices para tablas volcadas
@@ -270,13 +275,13 @@ ALTER TABLE `estado`
 -- AUTO_INCREMENT de la tabla `post`
 --
 ALTER TABLE `post`
-  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_licencia`

@@ -37,6 +37,7 @@ if (isset($_POST['editar'])) {
     $id_rol = trim($_POST['id_rol']);
     $id_estado = trim($_POST['id_estado']);
     $password = trim($_POST['password']);
+    $codigo_barras = trim($_POST['codigo_barras']);
     
     if (empty($nom_usu) || empty($correo)) {
         echo "<script>alert('El nombre y correo son obligatorios');
@@ -63,9 +64,10 @@ if (isset($_POST['editar'])) {
                 password = ?, 
                 id_rol = ?, 
                 id_estado = ?, 
-                NIT = ?
+                NIT = ?,
+                codigo_barras = ?
             WHERE doc_usu = ?");
-        $params = [$nom_usu, $correo, $password_hash, $id_rol, $id_estado, $_POST['nit_empresa'], $doc_usu];
+        $params = [$nom_usu, $correo, $password_hash, $id_rol, $id_estado, $_POST['nit_empresa'], $codigo_barras, $doc_usu];
     } else {
         // Si no hay nueva contraseña, mantener la actual
         $sql = $con->prepare("
@@ -74,9 +76,10 @@ if (isset($_POST['editar'])) {
                 correo = ?, 
                 id_rol = ?, 
                 id_estado = ?, 
-                NIT = ?
+                NIT = ?,
+                codigo_barras = ?
             WHERE doc_usu = ?");
-        $params = [$nom_usu, $correo, $id_rol, $id_estado, $_POST['nit_empresa'], $doc_usu];
+        $params = [$nom_usu, $correo, $id_rol, $id_estado, $_POST['nit_empresa'], $codigo_barras,$doc_usu];
     }
     
     if ($sql->execute($params)) {
@@ -98,7 +101,7 @@ if (isset($_POST['editar'])) {
     <link rel="stylesheet" href="../../../assets/css/blog.css">
     <link rel="stylesheet" href="../../../assets/css/licencias.css">
 </head>
-<body>
+<body onload="form-empresa.doc_usu.focus()">
     <div class="container">
         <header>
             <div class="header-container">
@@ -114,14 +117,14 @@ if (isset($_POST['editar'])) {
         </header>
 
         <div class="form-container">
-            <form method="post" class="form-empresa">
+            <form method="post" name="form-empresa" class="form-empresa">
                 <div class="form-group">
                     <label>Documento</label>
                     <input type="text" value="<?php echo htmlspecialchars($usuario['doc_usu']); ?>" disabled>
                 </div>
                 <div class="form-group">
                     <label>Nombre Completo</label>
-                    <input type="text" name="nom_usu" value="<?php echo htmlspecialchars($usuario['nom_usu']); ?>" required>
+                    <input type="text" tabindex="0" name="nom_usu" value="<?php echo htmlspecialchars($usuario['nom_usu']); ?>" required>
                 </div>
                 <div class="form-group">
                     <label>Correo</label>
@@ -173,6 +176,19 @@ if (isset($_POST['editar'])) {
                         }
                         ?>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Código de barras</label>
+                    <input type="text" name="codigo_barras" value="<?php echo htmlspecialchars($usuario['codigo_barras']); ?>" required>
+                    
+                    <?php if (!empty($usuario['codigo_barras'])) : 
+                        $barcodeData = urlencode($usuario['codigo_barras']);
+                        $externalBarcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data={$barcodeData}&code=Code128&dpi=96";
+                    ?>
+                        <div class="barcode-container">
+                            <img src="<?php echo $externalBarcodeUrl; ?>" alt="Código de barras">
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <button type="submit" name="editar">Guardar Cambios</button>
             </form>

@@ -31,7 +31,7 @@ $usuarios = $sql->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../../assets/css/blog.css">
     <link rel="stylesheet" href="../../assets/css/licencias.css">
 </head>
-<body>
+<body onload="formuusu.doc_usu.focus()">
     <div class="container">
         <header>
             <div class="header-container">
@@ -48,14 +48,15 @@ $usuarios = $sql->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="nuevo-post">
             <h2>Registrar Nuevo Usuario</h2>
-            <form action="usuario/crear_usuario.php" method="post" class="form-empresa">
+            <form action="usuario/crear_usuario.php" name="formuusu"
+             method="post" class="form-empresa">
                 <div class="form-group">
                     <label>Documento de Identidad</label>
                     <input type="text" name="doc_usu" required placeholder="Ingrese el documento">
                 </div>
                 <div class="form-group">
                     <label>Nombre Completo</label>
-                    <input type="text" name="nom_usu" required placeholder="Ingrese el nombre">
+                    <input tabindex="0" type="text" name="nom_usu" required placeholder="Ingrese el nombre">
                 </div>
                 <div class="form-group">
                     <label>Correo</label>
@@ -108,12 +109,31 @@ $usuarios = $sql->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label>Codigo de Barras</label>
+                    <input type="text" name="codigo_barras" placeholder="Escanee el codigo de barras del usuario">
+                </div>
                 <button type="submit" name="crear">Crear Usuario</button>
             </form>
         </div>
-
+        
+        
+        
         <div class="usuarios">
             <h2>Usuarios Registrados</h2>
+
+            <!-- buscador que ejecute la funcion de buscar al usuario en cada keyup -->
+        <div class="buscador">
+            <form method="GET" class="form-buscar">
+                <div class="form-group">
+                    <input type="text" 
+                           id="buscarUsuario" 
+                           autocomplete="off"
+                           placeholder="Buscar por documento o código de barras">
+                </div>
+            </form>
+        </div>
+
             <?php if ($usuarios): ?>
                 <div class="grid-empresas">
                     <?php foreach ($usuarios as $usuario): ?>
@@ -129,6 +149,16 @@ $usuarios = $sql->fetchAll(PDO::FETCH_ASSOC);
                                 <p><strong>Correo:</strong> <?php echo htmlspecialchars($usuario['correo']); ?></p>
                                 <p><strong>Rol:</strong> <?php echo htmlspecialchars($usuario['nom_rol']); ?></p>
                                 <p><strong>Empresa:</strong> <?php echo htmlspecialchars($usuario['nom_empresa']); ?></p>
+                                <p><strong>Código de Barras:</strong> <?php echo htmlspecialchars($usuario['codigo_barras']); ?></p>
+                                
+                                <?php if (!empty($usuario['codigo_barras'])) : 
+                                    $barcodeData = urlencode($usuario['codigo_barras']);
+                                    $externalBarcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data={$barcodeData}&code=Code128&dpi=96";
+                                ?>
+                                    <div class="barcode-container">
+                                        <img src="<?php echo $externalBarcodeUrl; ?>" alt="Código de barras">
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="empresa-actions">
                                 <a href="usuario/editar_usuario.php?doc=<?php echo urlencode($usuario['doc_usu']); ?>" 
@@ -145,5 +175,40 @@ $usuarios = $sql->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
         </div>
     </div>
+    
+    <script>
+    function buscarUsuarios() {
+        let input = document.getElementById('buscarUsuario');
+        let filtro = input.value.toLowerCase().trim();
+        let cards = document.getElementsByClassName('empresa-card');
+
+        for (let i = 0; i < cards.length; i++) {
+            let card = cards[i];
+            
+            // Extraer solo el valor del documento y codigo de barras, sin el texto "Documento:" y "Código de Barras:"
+            let documentoCompleto = card.querySelector('p:nth-child(1)').textContent;//obtenemos de la card el primer p que es el documento
+            let codigoBarrasCompleto = card.querySelector('p:nth-child(5)').textContent;//y obtenemos el quinto p que es el codigo de barras
+            
+            // Limpiar los textos para obtener solo los valores, con split nos da por ejemplo [documento, valor] y tomamos el valor (1)
+            let documento = documentoCompleto.split(':')[1].trim().toLowerCase();
+            let codigoBarras = codigoBarrasCompleto.split(':')[1].trim().toLowerCase();
+
+            // Verificar si el filtro coincide con documento o código de barras
+            if (documento.includes(filtro) || codigoBarras.includes(filtro)) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        }
+    }
+
+    // Evitar que el formulario se envíe al presionar enter
+    document.querySelector('.form-buscar').addEventListener('submit', function(e) {
+        e.preventDefault();
+    });
+
+    // Agregar el evento keyup para buscar mientras se escribe
+    document.getElementById('buscarUsuario').addEventListener('keyup', buscarUsuarios);
+    </script>
 </body>
 </html>

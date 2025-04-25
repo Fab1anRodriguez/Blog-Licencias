@@ -23,6 +23,29 @@ $sql->execute([$doc_usu]);
 $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<?php 
+    //consultamos el nombre de la empresa a la que pertenece el usuario
+    $sql_empresa = $con->prepare("
+        SELECT usuarios.*, empresa.nom_empresa 
+        FROM usuarios 
+        INNER JOIN empresa ON usuarios.NIT = empresa.NIT 
+        WHERE usuarios.doc_usu = ?");
+    $sql_empresa->execute([$doc_usu]);
+    $empresa = $sql_empresa->fetch(PDO::FETCH_ASSOC);
+    
+    // Verificar el tipo de licencia de la empresa
+    $sql_licencia = $con->prepare("
+        SELECT l.id_tipolicencia 
+        FROM licencia l
+        WHERE l.nit_empresa = ? 
+        AND l.id_estado = 1 
+        AND l.fecha_fin >= CURRENT_DATE()
+        ORDER BY l.fecha_fin DESC 
+        LIMIT 1");
+    $sql_licencia->execute([$empresa['NIT']]);
+    $licencia = $sql_licencia->fetch(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,34 +53,14 @@ $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Blog</title>
     <link rel="stylesheet" href="../../assets/css/blog.css">
+    <link rel="stylesheet" href="../../assets/css/licencias.css">
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="header-container">
             <h1>Mi Blog</h1>
             <p>Bienvenido, <?php echo $_SESSION['nom_usu']; ?></p>
-            <?php 
-            //consultamos el nombre de la empresa a la que pertenece el usuario
-            $sql_empresa = $con->prepare("
-                SELECT usuarios.*, empresa.nom_empresa 
-                FROM usuarios 
-                INNER JOIN empresa ON usuarios.NIT = empresa.NIT 
-                WHERE usuarios.doc_usu = ?");
-            $sql_empresa->execute([$doc_usu]);
-            $empresa = $sql_empresa->fetch(PDO::FETCH_ASSOC);
             
-            // Verificar el tipo de licencia de la empresa
-            $sql_licencia = $con->prepare("
-                SELECT l.id_tipolicencia 
-                FROM licencia l
-                WHERE l.nit_empresa = ? 
-                AND l.id_estado = 1 
-                AND l.fecha_fin >= CURRENT_DATE()
-                ORDER BY l.fecha_fin DESC 
-                LIMIT 1");
-            $sql_licencia->execute([$empresa['NIT']]);
-            $licencia = $sql_licencia->fetch(PDO::FETCH_ASSOC);
-            ?>
 
             <p>Empresa: <?php echo htmlspecialchars($empresa['nom_empresa']); ?></p>
             <a href="../../includes/cerrar_sesion.php" class="cerrar-sesion">Cerrar Sesión</a>

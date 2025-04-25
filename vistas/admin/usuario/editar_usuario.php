@@ -34,19 +34,11 @@ if (isset($_POST['editar'])) {
     $nom_usu = trim($_POST['nom_usu']);
     $correo = trim($_POST['correo']);
     $id_estado = trim($_POST['id_estado']);
+    $codigo_barras = trim($_POST['codigo_barras']);
     $password = trim($_POST['password']);
     
     if (empty($nom_usu) || empty($correo)) {
         echo "<script>alert('El nombre y correo son obligatorios');
-        window.location='editar_usuario.php?doc=" . $doc_usu . "';</script>";
-        exit();
-    }
-    
-    // Verificar si el correo existe para otro usuario
-    $check = $con->prepare("SELECT COUNT(*) FROM usuarios WHERE correo = ? AND doc_usu != ?");
-    $check->execute([$correo, $doc_usu]);
-    if ($check->fetchColumn() > 0) {
-        echo "<script>alert('Ya existe otro usuario con este correo');
         window.location='editar_usuario.php?doc=" . $doc_usu . "';</script>";
         exit();
     }
@@ -58,17 +50,19 @@ if (isset($_POST['editar'])) {
             SET nom_usu = ?, 
                 correo = ?, 
                 password = ?, 
-                id_estado = ?
+                id_estado = ?,
+                codigo_barras = ?
             WHERE doc_usu = ? AND NIT = ?");
-        $params = [$nom_usu, $correo, $password_hash, $id_estado, $doc_usu, $_SESSION['NIT']];
+        $params = [$nom_usu, $correo, $password_hash, $id_estado, $codigo_barras, $doc_usu, $_SESSION['NIT']];
     } else {
         $sql = $con->prepare("
             UPDATE usuarios 
             SET nom_usu = ?, 
                 correo = ?, 
-                id_estado = ?
+                id_estado = ?,
+                codigo_barras = ?
             WHERE doc_usu = ? AND NIT = ?");
-        $params = [$nom_usu, $correo, $id_estado, $doc_usu, $_SESSION['NIT']];
+        $params = [$nom_usu, $correo, $id_estado, $codigo_barras, $doc_usu, $_SESSION['NIT']];
     }
     
     if ($sql->execute($params)) {
@@ -96,11 +90,9 @@ if (isset($_POST['editar'])) {
             <div class="header-container">
                 <div>
                     <h1>Editar Usuario</h1>
-                    <p>Bienvenido, <?php echo $_SESSION['nom_usu']; ?></p>
                 </div>
                 <div class="admin-actions">
                     <a href="../usuarios.php" class="btn-volver">Volver</a>
-                    <a href="../../../includes/cerrar_sesion.php" class="cerrar-sesion">Cerrar Sesion</a>
                 </div>
             </div>
         </header>
@@ -109,10 +101,10 @@ if (isset($_POST['editar'])) {
             <form method="post" class="form-empresa">
                 <div class="form-group">
                     <label>Documento</label>
-                    <input type="text" value="<?php echo htmlspecialchars($usuario['doc_usu']); ?>" disabled>
+                    <input type="text" value="<?php echo htmlspecialchars($usuario['doc_usu']); ?>" readonly>
                 </div>
                 <div class="form-group">
-                    <label>Nombre Completo</label>
+                    <label>Nombre</label>
                     <input type="text" name="nom_usu" value="<?php echo htmlspecialchars($usuario['nom_usu']); ?>" required>
                 </div>
                 <div class="form-group">
@@ -132,11 +124,22 @@ if (isset($_POST['editar'])) {
                         $estados = $sql_estado->fetchAll(PDO::FETCH_ASSOC);
                         foreach($estados as $estado) {
                             $selected = ($estado['id_estado'] == $usuario['id_estado']) ? 'selected' : '';
-                            echo "<option value='" . $estado['id_estado'] . "' $selected>" . 
-                                 htmlspecialchars($estado['nom_estado']) . "</option>";
+                            echo "<option value='" . $estado['id_estado'] . "' " . $selected . ">" . $estado['nom_estado'] . "</option>";
                         }
                         ?>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Código de Barras</label>
+                    <input type="text" name="codigo_barras" value="<?php echo htmlspecialchars($usuario['codigo_barras']); ?>">
+                    <?php if (!empty($usuario['codigo_barras'])) : 
+                        $barcodeData = urlencode($usuario['codigo_barras']);
+                        $externalBarcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data={$barcodeData}&code=Code128&dpi=96";
+                    ?>
+                        <div class="barcode-container">
+                            <img src="<?php echo $externalBarcodeUrl; ?>" alt="Código de barras">
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <button type="submit" name="editar">Guardar Cambios</button>
             </form>

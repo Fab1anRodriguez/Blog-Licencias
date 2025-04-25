@@ -16,8 +16,21 @@ if (!isset($_GET['doc'])) {
 
 $doc_usu = $_GET['doc'];
 
-// Eliminar usuario asegurando que pertenezca a la empresa del admin
-$sql = $con->prepare("DELETE FROM usuarios WHERE doc_usu = ? AND nit_empresa = ? AND id_rol = 3");
+// Verificar que el usuario a eliminar pertenezca a la empresa del admin y sea usuario normal
+$sql = $con->prepare("
+    SELECT COUNT(*) 
+    FROM usuarios 
+    WHERE doc_usu = ? AND NIT = ? AND id_rol = 1");
+$sql->execute([$doc_usu, $_SESSION['NIT']]);
+
+if ($sql->fetchColumn() == 0) {
+    echo "<script>alert('No tiene permiso para eliminar este usuario');
+    window.location='../usuarios.php';</script>";
+    exit();
+}
+
+// Eliminar el usuario
+$sql = $con->prepare("DELETE FROM usuarios WHERE doc_usu = ? AND NIT = ? AND id_rol = 1");
 
 if ($sql->execute([$doc_usu, $_SESSION['NIT']])) {
     echo "<script>alert('Usuario eliminado exitosamente');

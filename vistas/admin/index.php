@@ -78,7 +78,7 @@ $total_usuarios = $sql_usuarios->fetch(PDO::FETCH_ASSOC)['total_usuarios'];
                 <div class="empresa-header">
                     <h3><?php echo htmlspecialchars($empresa_info['nom_empresa']); ?></h3>
                     <span class="estado-licencia estado-<?php echo $empresa_info['estado_licencia']; ?>">
-                        <?php echo htmlspecialchars($empresa_info['estado_licencia_nombre']); ?>
+                        <?php echo ($empresa_info['estado_licencia_nombre']); ?>
                     </span>
                 </div>
                 <div class="empresa-body">
@@ -91,13 +91,9 @@ $total_usuarios = $sql_usuarios->fetch(PDO::FETCH_ASSOC)['total_usuarios'];
                     <p><strong>Dirección:</strong> <?php echo htmlspecialchars($empresa_info['direccion']); ?></p>
                     <p><strong>Correo:</strong> <?php echo htmlspecialchars($empresa_info['correo']); ?></p>
                     <p><strong>Total Usuarios:</strong> <?php echo $total_usuarios; ?></p>
-                    <p><strong>Tipo de licencia:</strong> <?php echo htmlspecialchars($empresa_info['nom_tipolicencia']); ?> </p>
-                    <p><strong>Días restantes de licencia:</strong> 
-                        <?php echo $empresa_info['dias_restantes']; ?> días
-                    </p>
-                    <p><strong>Fecha de vencimiento:</strong> 
-                        <?php echo date('d/m/Y', strtotime($empresa_info['fecha_fin'])); ?>
-                    </p>
+                    <p><strong>Tipo de licencia:</strong> <?php echo ($empresa_info['nom_tipolicencia']); ?> </p>
+                    <p><strong>Días restantes de licencia:</strong> <?php echo $empresa_info['dias_restantes']; ?> días </p>
+                    <p><strong>Fecha de vencimiento:</strong> <?php echo date('d/m/Y', strtotime($empresa_info['fecha_fin'])); ?> </p>
                 </div>
             </div>
         </div>
