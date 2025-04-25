@@ -11,15 +11,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 2){
 
 // Obtener información de la empresa y su licencia
 $sql = $con->prepare("
-    SELECT e.*, l.fecha_fin, l.fecha_ini, l.id_estado as estado_licencia,
-           DATEDIFF(l.fecha_fin, CURRENT_DATE()) as dias_restantes,
-           el.nom_estado as estado_empresa,
-           el2.nom_estado as estado_licencia_nombre
+    SELECT 
+        e.*, l.fecha_fin, 
+        l.fecha_ini, 
+        l.id_estado as estado_licencia,
+        l.id_tipolicencia,
+        DATEDIFF(l.fecha_fin, CURRENT_DATE()) as dias_restantes,
+        el.nom_estado as estado_empresa,
+        el2.nom_estado as estado_licencia_nombre,
+        tl.nom_tipolicencia
     FROM empresa e
     LEFT JOIN licencia l ON e.NIT = l.nit_empresa
     LEFT JOIN estado el ON e.id_estado = el.id_estado
     LEFT JOIN estado el2 ON l.id_estado = el2.id_estado
-    WHERE e.NIT = ? AND l.id_estado = 1
+    LEFT JOIN tipo_licencia tl ON l.id_tipolicencia = tl.id_tipolicencia
+    WHERE e.NIT = ? AND l.fecha_fin >= CURRENT_DATE() AND l.id_estado = 1 
     ORDER BY l.fecha_fin DESC LIMIT 1
 ");
 $sql->execute([$_SESSION['NIT']]);
@@ -29,7 +35,7 @@ $empresa_info = $sql->fetch(PDO::FETCH_ASSOC);
 $sql_usuarios = $con->prepare("
     SELECT COUNT(*) as total_usuarios 
     FROM usuarios 
-    WHERE NIT = ? AND id_rol = 3
+    WHERE NIT = ? AND id_rol = 1
 ");
 $sql_usuarios->execute([$_SESSION['NIT']]);
 $total_usuarios = $sql_usuarios->fetch(PDO::FETCH_ASSOC)['total_usuarios'];
@@ -56,9 +62,15 @@ $total_usuarios = $sql_usuarios->fetch(PDO::FETCH_ASSOC)['total_usuarios'];
                     <a href="../../includes/cerrar_sesion.php" class="cerrar-sesion">Cerrar Sesion</a>
                 </div>
             </div>
+            <?php if ($empresa_info && $empresa_info['id_tipolicencia'] != 1): ?>
             <nav class="nav-actions">
                 <a href="usuarios.php" class="btn-nav">Usuarios</a>
             </nav>
+            <?php else: ?>
+            <div class="licencia-mensaje">
+                <p>Necesita una licencia completa para gestionar usuarios</p>
+            </div>
+            <?php endif; ?>
         </header>
 
         <div class="empresa-info">
@@ -79,6 +91,7 @@ $total_usuarios = $sql_usuarios->fetch(PDO::FETCH_ASSOC)['total_usuarios'];
                     <p><strong>Dirección:</strong> <?php echo htmlspecialchars($empresa_info['direccion']); ?></p>
                     <p><strong>Correo:</strong> <?php echo htmlspecialchars($empresa_info['correo']); ?></p>
                     <p><strong>Total Usuarios:</strong> <?php echo $total_usuarios; ?></p>
+                    <p><strong>Tipo de licencia:</strong> <?php echo htmlspecialchars($empresa_info['nom_tipolicencia']); ?> </p>
                     <p><strong>Días restantes de licencia:</strong> 
                         <?php echo $empresa_info['dias_restantes']; ?> días
                     </p>

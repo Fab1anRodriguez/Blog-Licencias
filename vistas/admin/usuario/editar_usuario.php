@@ -20,7 +20,7 @@ $doc_usu = $_GET['doc'];
 $sql = $con->prepare("
     SELECT usuarios.* 
     FROM usuarios 
-    WHERE doc_usu = ? AND nit_empresa = ? AND id_rol = 3");
+    WHERE doc_usu = ? AND NIT = ? AND id_rol = 1");
 $sql->execute([$doc_usu, $_SESSION['NIT']]);
 $usuario = $sql->fetch(PDO::FETCH_ASSOC);
 
@@ -55,14 +55,19 @@ if (isset($_POST['editar'])) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         $sql = $con->prepare("
             UPDATE usuarios 
-            SET (nom_usu, correo, password, id_estado) = (?, ?, ?, ?)
-            WHERE doc_usu = ? AND nit_empresa = ?");
+            SET nom_usu = ?, 
+                correo = ?, 
+                password = ?, 
+                id_estado = ?
+            WHERE doc_usu = ? AND NIT = ?");
         $params = [$nom_usu, $correo, $password_hash, $id_estado, $doc_usu, $_SESSION['NIT']];
     } else {
         $sql = $con->prepare("
             UPDATE usuarios 
-            SET (nom_usu, correo, id_estado) = (?, ?, ?)
-            WHERE doc_usu = ? AND nit_empresa = ?");
+            SET nom_usu = ?, 
+                correo = ?, 
+                id_estado = ?
+            WHERE doc_usu = ? AND NIT = ?");
         $params = [$nom_usu, $correo, $id_estado, $doc_usu, $_SESSION['NIT']];
     }
     
@@ -122,7 +127,7 @@ if (isset($_POST['editar'])) {
                     <label>Estado</label>
                     <select name="id_estado" required>
                         <?php
-                        $sql_estado = $con->prepare("SELECT * FROM estado");
+                        $sql_estado = $con->prepare("SELECT * FROM estado where id_estado = 1 OR id_estado = 2 order by id_estado asc");
                         $sql_estado->execute();
                         $estados = $sql_estado->fetchAll(PDO::FETCH_ASSOC);
                         foreach($estados as $estado) {

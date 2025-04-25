@@ -6,13 +6,13 @@ $con = $conex->conectar();
 
 // verificar si el usuario esta logueado y es superadmin
 if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 3) {
-    header('Location: ../../../index.php');
+    header('Location: ../../../../index.php');
     exit();
 }
 
 // obtener la clave de la licencia a editar
 if (!isset($_GET['clave'])) {
-    header('Location: index.php');
+    header('Location: ../index.php');
     exit();
 }
 
@@ -32,7 +32,7 @@ $licencia = $sql->fetch(PDO::FETCH_ASSOC);
 
 if (!$licencia) {
     echo "<script>alert('Licencia no encontrada');
-    window.location='index.php';</script>";
+    window.location='../index.php';</script>";
     exit();
 }
 
@@ -60,7 +60,7 @@ if (isset($_POST['editar'])) {
     
     if ($sql->execute([$nit_empresa, $fecha_ini, $fecha_fin, $id_estado, $id_tipolicencia, $clave])) {
         echo "<script>alert('Licencia actualizada exitosamente');
-        window.location='index.php';</script>";
+        window.location='../index.php';</script>";
     } else {
         echo "<script>alert('Error al actualizar la licencia');
         window.location='editar_licencia.php?clave=" . urlencode($clave) . "';</script>";
@@ -86,7 +86,7 @@ if (isset($_POST['editar'])) {
                     <p>Bienvenido, <?php echo $_SESSION['nom_usu']; ?></p>
                 </div>
                 <div class="admin-actions">
-                    <a href="../index.php" class="btn-volver">Volver</a>
+                    <a href="../../index.php" class="btn-volver">Volver</a>
                     <a href="../../../includes/cerrar_sesion.php" class="cerrar-sesion">Cerrar Sesion</a>
                 </div>
             </div>
@@ -150,7 +150,7 @@ if (isset($_POST['editar'])) {
                 </div>
                 <div class="form-actions">
                     <button type="submit" name="editar">Guardar Cambios</button>
-                    <a href="index.php" class="btn-cancelar">Cancelar</a>
+                    <a href="../index.php" class="btn-cancelar">Cancelar</a>
                 </div>
             </form>
         </div>

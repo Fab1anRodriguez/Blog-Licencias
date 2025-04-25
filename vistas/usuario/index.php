@@ -45,7 +45,20 @@ $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
                 WHERE usuarios.doc_usu = ?");
             $sql_empresa->execute([$doc_usu]);
             $empresa = $sql_empresa->fetch(PDO::FETCH_ASSOC);
+            
+            // Verificar el tipo de licencia de la empresa
+            $sql_licencia = $con->prepare("
+                SELECT l.id_tipolicencia 
+                FROM licencia l
+                WHERE l.nit_empresa = ? 
+                AND l.id_estado = 1 
+                AND l.fecha_fin >= CURRENT_DATE()
+                ORDER BY l.fecha_fin DESC 
+                LIMIT 1");
+            $sql_licencia->execute([$empresa['NIT']]);
+            $licencia = $sql_licencia->fetch(PDO::FETCH_ASSOC);
             ?>
+
             <p>Empresa: <?php echo htmlspecialchars($empresa['nom_empresa']); ?></p>
             <a href="../../includes/cerrar_sesion.php" class="cerrar-sesion">Cerrar Sesión</a>
         </header>
@@ -75,7 +88,13 @@ $posts = $sql->fetchAll(PDO::FETCH_ASSOC);
                 <div class="form-group">
                     <textarea name="contenido" placeholder="Contenido de la publicacion" required></textarea>
                 </div>
-                <button type="submit" name="publicar">Publicar</button>
+
+                <?php if ($licencia && $licencia['id_tipolicencia'] != 1): ?>
+                    <button type="submit" name="publicar">Publicar</button>
+                <?php else: ?>
+                    <p class="licencia-mensaje">Necesita una licencia completa para publicar</p>
+                <?php endif; ?>
+                
             </form>
         </div>
 

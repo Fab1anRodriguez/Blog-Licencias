@@ -23,10 +23,10 @@ if (isset($_POST['crear'])) {
         for($bloque = 0; $bloque < 6; $bloque++) {
             // cada bloque tiene 4 caracteres
             for($i = 0; $i < 4; $i++) {
-                // selecciona un caracter aleatorio de la cadena $caracteres
+                // selecciona un caracter aleatorio de la cadena $caracteres con la funcion rand()
                 $clave .= $caracteres[rand(0, strlen($caracteres) - 1)];
             }
-            // agrega un guion entre bloques, excepto al final
+            // agregamos un guion entre bloques, excepto al final
             if($bloque < 5) $clave .= '-';
         }
         return $clave;

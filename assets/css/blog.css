@@ -243,3 +243,10 @@ select.categoria option {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(214, 224, 240, 0.2);
 }
+
+.licencia-mensaje {
+    color: #ff4444;
+    text-align: center;
+    margin: 10px 0;
+    font-style: italic;
+}
